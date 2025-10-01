@@ -1,3 +1,3 @@
-module github.com/dropon/solvice-optimisation-api
+module github.com/dropon/solvice-optimisation-client
 
 go 1.25
