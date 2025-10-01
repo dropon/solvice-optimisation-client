@@ -1,7 +1,7 @@
 /*
 VRP API
 
-             Welcome to the Solvice API! You can use our API to access Solvice API endpoints,             which can get information on your solved jobs,             their statuses and of course post new solve jobs.         
+             Welcome to the Solvice API! You can use our API to access Solvice API endpoints,             which can get information on your solved jobs,             their statuses and of course post new solve jobs.
 
 API version: 2.0
 */
@@ -11,10 +11,10 @@ API version: 2.0
 package openapi
 
 import (
-	"encoding/json"
-	"time"
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // checks if the PeriodDto type satisfies the MappedNullable interface at compile time
@@ -22,11 +22,11 @@ var _ MappedNullable = &PeriodDto{}
 
 // PeriodDto Subset of the planning period
 type PeriodDto struct {
-	// Start date-time 
+	// Start date-time
 	From time.Time `json:"from"`
-	// End date-time 
+	// End date-time
 	End interface{} `json:"end"`
-	To time.Time `json:"to"`
+	To  time.Time   `json:"to"`
 }
 
 type _PeriodDto PeriodDto
@@ -126,7 +126,7 @@ func (o *PeriodDto) SetTo(v time.Time) {
 }
 
 func (o PeriodDto) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -156,12 +156,11 @@ func (o *PeriodDto) UnmarshalJSON(data []byte) (err error) {
 	allProperties := make(map[string]interface{})
 
 	err = json.Unmarshal(data, &allProperties)
-
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -172,7 +171,6 @@ func (o *PeriodDto) UnmarshalJSON(data []byte) (err error) {
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
 	err = decoder.Decode(&varPeriodDto)
-
 	if err != nil {
 		return err
 	}
@@ -217,5 +215,3 @@ func (v *NullablePeriodDto) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
