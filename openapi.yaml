@@ -1,0 +1,2672 @@
+openapi: "3.0.3"
+info:
+  title: "VRP API"
+  description: "\n            Welcome to the Solvice API! You can use our API to access\
+    \ Solvice API endpoints,\n            which can get information on your solved\
+    \ jobs,\n            their statuses and of course post new solve jobs.\n     \
+    \   "
+  version: "2.0"
+servers:
+- url: "https://api.solvice.io"
+  description: "Production API"
+security:
+- apikey: []
+tags:
+- name: "VRP API"
+  description: "VRP API"
+paths:
+  /v2/vrp/demo:
+    get:
+      tags:
+      - "Info"
+      summary: "Demo"
+      description: "Demo of random generated VRP instance"
+      operationId: "getDemoVRP"
+      parameters:
+      - name: "geolocation"
+        in: "query"
+        schema:
+          type: "string"
+          nullable: true
+      - name: "jobs"
+        in: "query"
+        schema:
+          format: "int32"
+          type: "integer"
+          nullable: true
+      - name: "radius"
+        in: "query"
+        schema:
+          format: "double"
+          type: "number"
+          nullable: true
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnRouteRequest"
+  /v2/vrp/evaluate:
+    post:
+      tags:
+      - "Actions"
+      summary: "Evaluate"
+      description: "Will trigger the evaluation run asynchronously."
+      operationId: "evaluateVRP"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OnRouteRequest"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SolviceStatusJob"
+  /v2/vrp/jobs/{id}:
+    get:
+      tags:
+      - "Info"
+      summary: "Request"
+      description: "Return original request"
+      operationId: "getVRPRequest"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnRouteRequest"
+  /v2/vrp/jobs/{id}/explanation:
+    get:
+      tags:
+      - "Info"
+      summary: "Explanation"
+      description: "Contains the explanation, once solved."
+      operationId: "getVRPExplanation"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoutingExplanation"
+  /v2/vrp/jobs/{id}/solution:
+    get:
+      tags:
+      - "Info"
+      summary: "Solution"
+      description: "Contains the actual solution, once solved."
+      operationId: "getVRPSolution"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnRouteResponse"
+  /v2/vrp/jobs/{id}/status:
+    get:
+      tags:
+      - "Info"
+      summary: "Status"
+      description: "Check whether the job is solved or not."
+      operationId: "getStatus"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SolviceStatusJob"
+  /v2/vrp/solve:
+    post:
+      tags:
+      - "Actions"
+      summary: "Solve"
+      description: "Will trigger the solver run asynchronously."
+      operationId: "solveVRP"
+      parameters:
+      - name: "millis"
+        in: "query"
+        schema:
+          type: "string"
+          nullable: true
+      - name: "instance"
+        in: "header"
+        schema:
+          type: "string"
+          nullable: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OnRouteRequest"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SolviceStatusJob"
+  /v2/vrp/suggest:
+    post:
+      tags:
+      - "Actions"
+      summary: "Suggest"
+      description: "Will return the suggest moves for an unassigned job."
+      operationId: "suggestVRP"
+      parameters:
+      - name: "millis"
+        in: "query"
+        schema:
+          type: "string"
+          nullable: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OnRouteRequest"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SolviceStatusJob"
+  /v2/vrp/sync/evaluate:
+    post:
+      tags:
+      - "Actions"
+      summary: "Synchronous Evaluate"
+      description: "Synchronous evaluate operation for low latency results"
+      operationId: "syncEvaluateVRP"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OnRouteRequest"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Evaluation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnRouteResponse"
+  /v2/vrp/sync/solve:
+    post:
+      tags:
+      - "Actions"
+      summary: "Synchronous Solve"
+      description: "Synchronous solve operation for low latency results"
+      operationId: "syncSolveVRP"
+      parameters:
+      - name: "millis"
+        in: "query"
+        schema:
+          type: "string"
+          nullable: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OnRouteRequest"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Solution"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnRouteResponse"
+  /v2/vrp/sync/suggest:
+    post:
+      tags:
+      - "Actions"
+      summary: "Synchronous Suggest"
+      description: "Synchronous suggest operation for low latency results"
+      operationId: "syncSuggestVRP"
+      parameters:
+      - name: "millis"
+        in: "query"
+        schema:
+          type: "string"
+          nullable: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OnRouteRequest"
+      responses:
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "427":
+          description: "Too many requests."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: "Internal error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "200":
+          description: "Suggestions"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnRouteResponse"
+components:
+  schemas:
+    ErrorMessage:
+      required:
+      - "message"
+      - "status"
+      type: "object"
+      properties:
+        message:
+          description: "Message"
+          type: "string"
+        status:
+          description: "HTTP status"
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/Status"
+    OnRouteRequest:
+      description: "OnRoute Request for solving, evaluating"
+      required:
+      - "resources"
+      - "jobs"
+      type: "object"
+      properties:
+        resources:
+          description: "List of available resources (vehicles, drivers, workers) that\
+            \ can be assigned to perform jobs. Each resource defines their working\
+            \ schedules, location constraints, capacity limits, and capabilities.\
+            \ At least one resource is required, with a maximum of 2000 resources\
+            \ per request."
+          maxItems: 2000
+          minItems: 1
+          uniqueItems: true
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Resource"
+        jobs:
+          description: "List of jobs/tasks to be assigned to resources. Each job specifies\
+            \ service requirements, location, time constraints, duration, and resource\
+            \ preferences. Jobs represent the work that needs to be scheduled and\
+            \ optimized. At least one job is required, with a maximum of 10,000 jobs\
+            \ per request."
+          maxItems: 10000
+          minItems: 1
+          uniqueItems: true
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Job"
+        options:
+          description: "Configuration options that control the solver's behavior,\
+            \ optimization strategy, and output format. These settings affect how\
+            \ the solver approaches the problem, what data is included in responses,\
+            \ and performance characteristics."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Options"
+          nullable: true
+        weights:
+          description: "Relative importance weights for different optimization objectives\
+            \ and constraint violations. These weights allow you to balance competing\
+            \ priorities such as travel time vs. resource utilization, or to emphasize\
+            \ certain constraints like customer preferences or service urgency."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Weights"
+          nullable: true
+        hook:
+          format: "uri"
+          description: "Optional webhook URL that will receive a POST request with\
+            \ the job ID when the optimization is complete. This enables asynchronous\
+            \ processing where you can submit a request and be notified when results\
+            \ are ready, rather than waiting for the synchronous response."
+          type: "string"
+          nullable: true
+        customDistanceMatrices:
+          description: "Optional configuration for custom distance matrices supporting\
+            \ multiple vehicle profiles and time slices. When provided, these matrix\
+            \ IDs will be used instead of calculating distances through routing engines.\
+            \ This is useful for scenarios requiring pre-computed distance matrices\
+            \ with specific routing constraints or for improved performance."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/CustomDistanceMatrices"
+          nullable: true
+        label:
+          type: "string"
+          nullable: true
+        relations:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Relation"
+          nullable: true
+      example:
+        jobs:
+        - name: "1"
+          duration: 3600
+        - name: "2"
+          duration: 3600
+        resources:
+        - name: "1"
+    SolviceStatusJob:
+      title: ""
+      description: "Status of a solve job"
+      required:
+      - "id"
+      type: "object"
+      properties:
+        id:
+          description: "Job ID"
+          type: "string"
+          nullable: false
+        status:
+          description: "Status of the solve."
+          enum:
+          - "QUEUED"
+          - "SOLVING"
+          - "SOLVED"
+          - "ERROR"
+          type: "string"
+          example: "SOLVING"
+          nullable: true
+        solveDuration:
+          format: "int32"
+          description: "Duration of the solve in seconds"
+          type: "integer"
+          nullable: true
+        errors:
+          description: "List of errors"
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Message"
+          nullable: true
+        warnings:
+          description: "List of warnings"
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Message"
+          nullable: true
+    RoutingExplanation:
+      description: "Explains the conflicts of a certain routing solution and the unresolved\
+        \ constraints."
+      required:
+      - "score"
+      type: "object"
+      properties:
+        score:
+          description: "Score of the solution."
+          type: "object"
+          properties:
+            hardScore:
+              format: "int64"
+              description: "The score of the constraints that are hard. This should\
+                \ be 0 in order to be feasible."
+              type: "integer"
+              nullable: true
+            mediumScore:
+              format: "int64"
+              description: "The score of the constraints that are medium."
+              type: "integer"
+              nullable: true
+            softScore:
+              format: "int64"
+              description: "The score of the constraints that are soft."
+              type: "integer"
+              nullable: true
+            feasible:
+              type: "boolean"
+              nullable: true
+          nullable: true
+        conflicts:
+          description: "Conflicts in the solution"
+          required:
+          - "constraint"
+          - "score"
+          type: "object"
+          items:
+            $ref: "#/components/schemas/RoutingConflict"
+          properties:
+            constraint:
+              description: "Constraint type."
+              type: "string"
+              nullable: false
+            score:
+              description: "Score impact of this conflict."
+              type: "string"
+              nullable: false
+            job:
+              description: "Job id."
+              type: "string"
+              nullable: true
+            resource:
+              description: "Resource id."
+              type: "string"
+              nullable: true
+            tag:
+              description: "Tag id."
+              type: "string"
+              nullable: true
+            relation:
+              type: "string"
+              nullable: true
+          example:
+            constraint: "TIME_WINDOW_CONFLICT"
+            score: "-1000"
+            job: "Job-1"
+            resource: "vehicle-1"
+          nullable: true
+        unresolved:
+          description: "Unresolved constraints in the solution"
+          required:
+          - "constraint"
+          - "score"
+          type: "object"
+          items:
+            $ref: "#/components/schemas/Unresolved"
+          properties:
+            constraint:
+              description: "Constraint type."
+              type: "string"
+              allOf:
+              - $ref: "#/components/schemas/OnrouteConstraint"
+              nullable: false
+            score:
+              description: "Score impact of this conflict."
+              type: "string"
+              nullable: false
+          example:
+            constraint: "TRAVEL_TIME"
+            score: "-1500"
+          nullable: true
+        alternatives:
+          description: "When `options.explanation.enabled` is set to `true`, this\
+            \ field will contain the alternatives for the solution.The key is the\
+            \ job name and the value is the list of assignments. Each assignment contains\
+            \ the resource, the date, and the score. In this way, you can check the\
+            \ impact of the alternative on the score."
+          type: "object"
+          additionalProperties:
+            type: "object"
+          example:
+            Job-1:
+            - job: "Job-1"
+              resource: "vehicle-2"
+              suggestedArrival: "2023-01-13T09:30:00Z"
+              latestArrival: "2023-01-13T10:00:00Z"
+              executedAfter: "Job-0"
+              score:
+                hard: 0
+                soft: -1500
+                feasible: true
+          nullable: true
+      example:
+        score:
+          hard: -2000
+          soft: -15000
+          feasible: false
+        conflicts:
+        - constraint: "TIME_WINDOW_CONFLICT"
+          score: "-1000"
+          job: "Job-1"
+          resource: "vehicle-1"
+        - constraint: "TAG_HARD"
+          score: "-1000"
+          job: "Job-2"
+          resource: "vehicle-1"
+          tag: "electrical"
+        unresolved:
+        - constraint: "TRAVEL_TIME"
+          score: "-15000"
+        alternatives:
+          Job-1:
+          - job: "Job-1"
+            resource: "vehicle-2"
+            suggestedArrival: "2023-01-13T09:30:00Z"
+            latestArrival: "2023-01-13T10:00:00Z"
+            executedAfter: "Job-0"
+            score:
+              hard: 0
+              soft: -1500
+              feasible: true
+    OnRouteResponse:
+      description: "OnRoute response from solve"
+      required:
+      - "trips"
+      type: "object"
+      properties:
+        id:
+          description: "Id of the solve job"
+          type: "string"
+          example: "0000-00000-00000-0000"
+          nullable: true
+        status:
+          description: "Status of the Response"
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/SolviceStatus"
+          example: "SOLVED"
+          nullable: true
+        score:
+          description: "Score tells you how good a solution is."
+          type: "object"
+          properties:
+            hardScore:
+              format: "int64"
+              description: "The score of the constraints that are hard. This should\
+                \ be 0 in order to be feasible."
+              type: "integer"
+              nullable: true
+            mediumScore:
+              format: "int64"
+              description: "The score of the constraints that are medium."
+              type: "integer"
+              nullable: true
+            softScore:
+              format: "int64"
+              description: "The score of the constraints that are soft."
+              type: "integer"
+              nullable: true
+            feasible:
+              type: "boolean"
+              nullable: true
+          nullable: true
+        unresolved:
+          description: "Constraints that are violated"
+        trips:
+          description: "Actual solution: trips per shift/day and per resource"
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Trip"
+        totalWaitTimeInSeconds:
+          format: "int64"
+          description: "Wait time for all resources"
+          type: "integer"
+          example: 123
+          nullable: true
+        occupancy:
+          format: "double"
+          description: "How full this schedule is in terms of work time (incl travel)\
+            \ over capacity. Eg 80%"
+          type: "number"
+          example: 0.8
+          nullable: true
+        totalTravelDistanceInMeters:
+          format: "int64"
+          description: "Travel distance for all resources in meters"
+          type: "integer"
+          example: 123
+          nullable: true
+        totalTravelTimeInSeconds:
+          format: "int64"
+          description: "Travel time for all resources"
+          type: "integer"
+          example: 123
+          nullable: true
+        totalServiceTimeInSeconds:
+          format: "int64"
+          description: "Service time for all resources"
+          type: "integer"
+          example: 123
+          nullable: true
+        unserved:
+          description: "Unserved jobs"
+          type: "array"
+          items:
+            type: "string"
+          example: "[job-1]"
+          nullable: true
+        unservedReasons:
+          description: "Reasons why jobs could not be served, mapped by job name"
+          type: "object"
+          additionalProperties:
+            type: "object"
+          example:
+            job-1:
+            - "DATE_TIME_WINDOW_CONFLICT"
+            - "TRIP_CAPACITY"
+          nullable: true
+        suggestions:
+          description: "List of suggested assignments returned by suggest api call"
+          type: "array"
+          items:
+            $ref: "#/components/schemas/SuggestionDto"
+          nullable: true
+        messages:
+          description: "Events and warnings generated during the solver execution"
+          type: "array"
+          items:
+            type: "string"
+          nullable: true
+        violations:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ViolatedConstraint"
+          nullable: true
+        workloadFairness:
+          format: "double"
+          type: "number"
+          nullable: true
+      example:
+        id: "0000-00000-00000-0000"
+        status: "SOLVED"
+        score:
+          hard: 0
+          soft: -12345
+          feasible: true
+        trips:
+        - resource: "vehicle-1"
+          date: "2023-01-13T00:00:00Z"
+          departureTime: "2023-01-13T08:00:00Z"
+          visits:
+          - job: "Job-1"
+            arrival: "2023-01-13T08:30:00Z"
+            serviceTime: 600
+            travelTime: 1800
+            distance: 15000
+            location:
+              latitude: 51.0543
+              longitude: 3.7174
+            waitTime: 0
+          waitTime: 0
+          travelTime: 3600
+          distance: 30000
+          workTime: 4200
+          serviceTime: 600
+          occupancy: 0.47
+        totalWaitTimeInSeconds: 0
+        totalTravelTimeInSeconds: 3600
+        totalTravelDistanceInMeters: 30000
+        totalServiceTimeInSeconds: 600
+        occupancy: 0.47
+        workloadFairness: 0.95
+        unserved: []
+        suggestions: []
+        messages:
+        - "Solution found in 2.5 seconds"
+    Status:
+      enum:
+      - "OK"
+      - "CREATED"
+      - "ACCEPTED"
+      - "NO_CONTENT"
+      - "RESET_CONTENT"
+      - "PARTIAL_CONTENT"
+      - "MULTIPLE_CHOICES"
+      - "MOVED_PERMANENTLY"
+      - "FOUND"
+      - "SEE_OTHER"
+      - "NOT_MODIFIED"
+      - "USE_PROXY"
+      - "TEMPORARY_REDIRECT"
+      - "PERMANENT_REDIRECT"
+      - "BAD_REQUEST"
+      - "UNAUTHORIZED"
+      - "PAYMENT_REQUIRED"
+      - "FORBIDDEN"
+      - "NOT_FOUND"
+      - "METHOD_NOT_ALLOWED"
+      - "NOT_ACCEPTABLE"
+      - "PROXY_AUTHENTICATION_REQUIRED"
+      - "REQUEST_TIMEOUT"
+      - "CONFLICT"
+      - "GONE"
+      - "LENGTH_REQUIRED"
+      - "PRECONDITION_FAILED"
+      - "REQUEST_ENTITY_TOO_LARGE"
+      - "REQUEST_URI_TOO_LONG"
+      - "UNSUPPORTED_MEDIA_TYPE"
+      - "REQUESTED_RANGE_NOT_SATISFIABLE"
+      - "EXPECTATION_FAILED"
+      - "PRECONDITION_REQUIRED"
+      - "TOO_MANY_REQUESTS"
+      - "REQUEST_HEADER_FIELDS_TOO_LARGE"
+      - "UNAVAILABLE_FOR_LEGAL_REASONS"
+      - "INTERNAL_SERVER_ERROR"
+      - "NOT_IMPLEMENTED"
+      - "BAD_GATEWAY"
+      - "SERVICE_UNAVAILABLE"
+      - "GATEWAY_TIMEOUT"
+      - "HTTP_VERSION_NOT_SUPPORTED"
+      - "NETWORK_AUTHENTICATION_REQUIRED"
+      type: "string"
+    Resource:
+      description: "Resource (vehicle, employee)"
+      required:
+      - "name"
+      - "shifts"
+      type: "object"
+      properties:
+        name:
+          description: "Unique identifier for this resource. Used to reference the\
+            \ resource in job assignments, relations, and results. Must be unique\
+            \ within the request."
+          type: "string"
+          example: "vehicle_1"
+        shifts:
+          description: "List of work shifts defining when this resource is available\
+            \ for job assignments. Each shift specifies working hours, start/end locations,\
+            \ breaks, and other constraints. Multiple shifts allow for multi-day planning\
+            \ or split-shift schedules. At least one shift is required."
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Shift"
+          nullable: true
+        start:
+          description: "Default start location for all shifts of this resource. This\
+            \ field is deprecated in favor of specifying start locations individually\
+            \ for each shift in the shifts array, which provides more flexibility\
+            \ for multi-day planning."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+          deprecated: true
+        end:
+          description: "Default end location for all shifts of this resource. This\
+            \ field is deprecated in favor of specifying end locations individually\
+            \ for each shift in the shifts array, which provides more flexibility\
+            \ for multi-day planning."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+          deprecated: true
+        maxDriveTimeInSeconds:
+          description: "Maximum total driving time allowed for this resource per shift\
+            \ or planning period. This constraint prevents excessive driving and ensures\
+            \ compliance with regulations or operational policies. Measured in seconds\
+            \ and includes all travel between jobs but excludes service time."
+        region:
+          description: "Preferred geographic region for this resource's job assignments.\
+            \ The solver will try to assign jobs that are geographically closer to\
+            \ this location, minimizing travel distance and time. This creates a soft\
+            \ constraint that influences job assignment without being mandatory."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+        tags:
+          description: "List of capability tags that define what types of jobs this\
+            \ resource can perform. Tags create matching constraints between jobs\
+            \ and resources - only resources with matching tags can be assigned to\
+            \ jobs that require those capabilities. For example, 'plumbing' or 'electrical'\
+            \ tags."
+          type: "array"
+          items:
+            type: "string"
+          nullable: true
+        category:
+          description: "Transportation mode used by this resource, affecting routing\
+            \ calculations and capabilities. CAR provides standard vehicle routing,\
+            \ BIKE uses bicycle-friendly routes and speeds, TRUCK uses heavy vehicle\
+            \ routing with appropriate restrictions. This is a beta feature."
+          enum:
+          - "CAR"
+          - "BIKE"
+          - "TRUCK"
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/Category"
+          nullable: true
+        rules:
+          description: "List of periodic constraints that apply to this resource over\
+            \ specified time periods. Rules can enforce minimum/maximum work time,\
+            \ service time, drive time, or job complexity limits. These constraints\
+            \ ensure compliance with labor regulations, operational policies, or capacity\
+            \ limitations."
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Rule"
+          nullable: true
+        capacity:
+          description: "Multi-dimensional capacity limits for this resource, such\
+            \ as weight, volume, or item count. Each dimension corresponds to job\
+            \ load requirements. For example, [500, 200] might represent 500 kg weight\
+            \ capacity and 200 cubic meters volume capacity. Maximum 5 dimensions\
+            \ supported."
+          maxItems: 5
+          type: "array"
+          items:
+            format: "int32"
+            type: "integer"
+          example:
+          - 500
+          - 200
+          nullable: true
+        hourlyCost:
+          format: "int32"
+          description: "Hourly cost rate for this resource in your currency units.\
+            \ Used to calculate total labor costs for solutions. Only counts active\
+            \ time (driving, servicing, or waiting), not idle time. This enables cost-based\
+            \ optimization and financial analysis of routing solutions."
+          type: "integer"
+          example: 60
+          nullable: true
+        compatibleResources:
+          description: "List of resource names that this resource is compatible to\
+            \ work with on linked jobs requiring cooperation"
+          type: "array"
+          items:
+            type: "string"
+          example:
+          - "driver2"
+          - "driver3"
+          nullable: true
+        maxDriveTime:
+          format: "int32"
+          type: "integer"
+          nullable: true
+        maxDriveTimeJob:
+          format: "int32"
+          type: "integer"
+          nullable: true
+      example:
+        name: "vehicle-1"
+        shifts:
+        - from: "2023-01-13T08:00:00Z"
+          to: "2023-01-13T17:00:00Z"
+          start:
+            latitude: 51.0543
+            longitude: 3.7174
+          end:
+            latitude: 51.0543
+            longitude: 3.7174
+          breaks:
+          - type: "WINDOWED"
+            duration: 1800
+            from: "2023-01-13T12:00:00Z"
+            to: "2023-01-13T13:00:00Z"
+        maxDriveTimeInSeconds: 28800
+        maxDriveTimeJob: 7200
+        tags:
+        - "plumbing"
+        - "electrical"
+        category: "CAR"
+        region:
+          latitude: 51.05
+          longitude: 3.72
+        rules:
+        - type: "MAX_SERVICE_TIME"
+          value: 28800
+          period: "WEEK"
+        capacity:
+        - 500
+        - 200
+        hourlyCost: 25
+    Job:
+      description: "A job to be performed by a resource."
+      required:
+      - "name"
+      type: "object"
+      properties:
+        name:
+          description: "Unique description"
+          type: "string"
+          example: "Job-1"
+        duration:
+          format: "int32"
+          description: "Service duration of the job"
+          type: "integer"
+          example: 5
+          nullable: true
+        location:
+          description: "Job location"
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+        priority:
+          format: "int32"
+          description: "Priority level that influences job selection during optimization.\
+            \ Higher priority jobs are more likely to be included in the final solution\
+            \ when not all jobs can be assigned due to resource or time constraints.\
+            \ The priority is multiplied by job duration to calculate the selection\
+            \ weight. Particularly important when partialPlanning is enabled. Default\
+            \ value is 1."
+          type: "integer"
+          example: 100
+          nullable: true
+        urgency:
+          format: "int32"
+          description: "Urgency level that influences the scheduling order of jobs.\
+            \ Higher urgency jobs are preferentially scheduled earlier in the day\
+            \ and earlier in the planning period, helping ensure time-critical tasks\
+            \ are completed first. This affects the sequence of job execution rather\
+            \ than job selection."
+          type: "integer"
+          example: 100
+          nullable: true
+        tags:
+          description: "List of skill or capability tags that define resource requirements\
+            \ for this job. Tags create hard or soft constraints linking jobs to resources\
+            \ with matching capabilities. For example, a 'plumbing' tag ensures only\
+            \ resources with plumbing skills can be assigned to plumbing jobs."
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Tag"
+          nullable: true
+        rankings:
+          description: "List of resource preference rankings for this job. Each ranking\
+            \ specifies a resource name and a preference score (1-100), where lower\
+            \ values indicate stronger preference. This allows jobs to have preferred\
+            \ resources while still allowing assignment to other resources if needed,\
+            \ with the preference reflected in the optimization score."
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Ranking"
+          nullable: true
+        windows:
+          description: "List of time windows during which this job can be started\
+            \ or executed. Each window defines a start and end time, creating temporal\
+            \ constraints for job scheduling. Multiple windows allow for flexible\
+            \ scheduling across different time periods. Jobs can only be assigned\
+            \ within these time boundaries."
+          type: "array"
+          items:
+            $ref: "#/components/schemas/DateWindow"
+          nullable: true
+        durationSquash:
+          format: "int32"
+          description: "Reduced service duration when this job is performed at the\
+            \ same location immediately after another job. This optimization recognizes\
+            \ that setup time, travel within a building, or equipment preparation\
+            \ may be shared between consecutive jobs at the same location. For example,\
+            \ if duration=600 and durationSquash=30, the second job at the same location\
+            \ takes only 30 seconds instead of 600."
+          type: "integer"
+          example: 30
+          nullable: true
+        plannedDate:
+          format: "Date string"
+          description: "Fixed date assignment for this job that must be respected\
+            \ during optimization. When specified, the job can only be scheduled on\
+            \ this specific date, creating a hard constraint that the solver must\
+            \ honor. Useful for jobs that are already committed to customers or have\
+            \ date-specific requirements."
+          type: "string"
+          example: "2022-03-10"
+          nullable: true
+        plannedResource:
+          description: "Fixed resource assignment for this job that must be respected\
+            \ during optimization. When specified, only the named resource can be\
+            \ assigned to this job, creating a hard constraint. Combined with plannedArrival,\
+            \ this allows for pre-committed assignments that the solver must work\
+            \ around when optimizing other jobs."
+          type: "string"
+          nullable: true
+        plannedArrival:
+          format: "ISO8601 datetime string"
+          description: "Fixed arrival time for this job that creates a soft constraint\
+            \ during optimization. The solver will try to schedule the job as close\
+            \ as possible to this time, with deviations penalized in the score according\
+            \ to the plannedWeight. This allows for customer appointment times or\
+            \ preferred scheduling while maintaining optimization flexibility."
+          type: "string"
+          example: "2023-01-13T09:00:00Z"
+          nullable: true
+        hard:
+          description: "In the case of partialPlanning planning, this indicates whether\
+            \ this order should be integrated into the planning or not."
+          type: "boolean"
+          example: true
+          nullable: true
+        hardWeight:
+          format: "int32"
+          description: "In the case of partialPlanning planning, this indicates the\
+            \ weight of this order."
+          type: "integer"
+          example: 1
+          nullable: true
+        padding:
+          format: "int32"
+          description: "Padding time before and after the job. In seconds"
+          type: "integer"
+          example: 300
+          nullable: true
+        load:
+          description: "Load"
+          type: "array"
+          items:
+            format: "int32"
+            type: "integer"
+          example:
+          - 5
+          - 10
+          nullable: true
+        allowedResources:
+          description: "List of vehicle names that are allowed to be assigned to this\
+            \ order."
+          type: "array"
+          items:
+            type: "string"
+          nullable: true
+          deprecated: true
+        initialResource:
+          description: "Warm start for the assigned resource: name of the vehicle\
+            \ to which this job is planned. Use this to speed up the solver and to\
+            \ start from an initial solution."
+          type: "string"
+          nullable: true
+        initialArrival:
+          format: "ISO8601 datetime string"
+          description: "Warm start for the arrival time. Use this to speed up the\
+            \ solver and to start from an initial solution."
+          type: "string"
+          example: "2023-01-13T09:00"
+          nullable: true
+        disallowedResources:
+          description: "List of vehicle names that are allowed to be assigned to this\
+            \ order."
+          type: "array"
+          items:
+            type: "string"
+          nullable: true
+        complexity:
+          format: "int32"
+          description: "Complexity of the job"
+          type: "integer"
+          example: 1
+          nullable: true
+        resumable:
+          description: "Enables job interruption by resource unavailability breaks.\
+            \ When true, the job can start before a break, pause during the break,\
+            \ and resume afterward. Default: false."
+          type: "boolean"
+          nullable: true
+        jobTypes:
+          description: "List of job types that this job represents. Used to enforce\
+            \ job type limitations per resource per timeframe."
+          type: "array"
+          items:
+            type: "string"
+          example:
+          - "Initial Appointment"
+          - "Wound Care"
+          nullable: true
+      example:
+        name: "Job-1"
+        duration: 600
+        location:
+          latitude: 51.0543
+          longitude: 3.7174
+        priority: 100
+        urgency: 80
+        tags:
+        - name: "plumbing"
+          needed: true
+          preferred: false
+        windows:
+        - from: "2023-01-13T08:00:00Z"
+          to: "2023-01-13T12:00:00Z"
+        durationSquash: 30
+        plannedDate: "2023-01-13"
+        plannedResource: "vehicle-1"
+        plannedArrival: "2023-01-13T09:00:00Z"
+        hard: true
+        hardWeight: 1
+        padding: 300
+        load:
+        - 5
+        - 10
+        initialResource: "vehicle-1"
+        initialArrival: "2023-01-13T09:00:00Z"
+        disallowedResources:
+        - "vehicle-3"
+        - "vehicle-4"
+    Options:
+      description: "Options to tweak the routing engine"
+      type: "object"
+      properties:
+        euclidian:
+          description: "Use euclidean distance calculations for travel time and distance\
+            \ instead of real road networks. When true, straight-line distances are\
+            \ used which is faster but less accurate. When false (default), routing\
+            \ engines like OSM, TomTom, or Google provide real road distances and\
+            \ travel times."
+          type: "boolean"
+          example: false
+          nullable: true
+        routingEngine:
+          description: "The routing engine used for calculating real-world distances\
+            \ and travel times. OSM (OpenStreetMaps) is free but basic, TomTom and\
+            \ Google provide more accurate traffic data and routing but require API\
+            \ keys. Only effective when euclidean is false."
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/RoutingEngine"
+          nullable: true
+        partialPlanning:
+          description: "Allow the solver to create solutions where not all jobs are\
+            \ assigned to resources. When true (default), the solver will assign as\
+            \ many jobs as possible while respecting constraints. When false, the\
+            \ solver will only accept solutions where all jobs are assigned, which\
+            \ may result in infeasible solutions."
+          type: "boolean"
+          example: true
+          nullable: true
+        minimizeResources:
+          description: "Primary optimization objective. When true, the solver prioritizes\
+            \ using fewer resources (vehicles/drivers) even if it increases total\
+            \ travel time. When false, the solver prioritizes minimizing total travel\
+            \ time even if it requires more resources. This fundamentally changes\
+            \ the optimization strategy."
+          type: "boolean"
+          example: true
+          nullable: true
+        traffic:
+          format: "double"
+          description: "Global traffic multiplier applied to all travel times. A value\
+            \ of 1.1 increases travel times by 10% to account for traffic congestion.\
+            \ For real-time traffic data, use TomTom or Google routing engines. This\
+            \ is a simple approximation for scenarios where precise traffic data is\
+            \ unavailable."
+          type: "number"
+          example: 1.1
+          nullable: true
+        polylines:
+          description: "Generate detailed route polylines (encoded route geometries)\
+            \ for each trip segment. When true, the response includes polyline data\
+            \ that can be used to draw routes on maps. This increases processing time\
+            \ and response size but provides visual route information for mapping\
+            \ applications."
+          type: "boolean"
+          example: true
+          nullable: true
+        fairWorkloadPerTrip:
+          description: "Enable workload balancing across all resources and all days/trips.\
+            \ When true, the solver attempts to distribute service time evenly across\
+            \ all resources and time periods, preventing overloading of specific resources\
+            \ or days. The effectiveness is controlled by `Weights.workloadSpreadWeight`\
+            \ and `options.workloadSensitivity`."
+          type: "boolean"
+          example: false
+          nullable: true
+        fairWorkloadPerResource:
+          description: "Enable workload balancing across different days for each individual\
+            \ resource. When true, the solver ensures that each resource's workload\
+            \ is distributed evenly across their available days, preventing some days\
+            \ from being overloaded while others are underutilized. Works in conjunction\
+            \ with `Weights.workloadSpreadWeight` and `options.workloadSensitivity`."
+          type: "boolean"
+          example: false
+          nullable: true
+        snapUnit:
+          format: "int32"
+          description: "Time granularity in seconds for arrival time snapping. All\
+            \ calculated arrival times are rounded up to the nearest multiple of this\
+            \ value. For example, with snapUnit=300 (5 minutes), an arrival time of\
+            \ 08:32 becomes 08:35. This helps create more practical schedules by avoiding\
+            \ precise timings that are difficult to follow in real operations. The\
+            \ snapping affects score calculation during optimization."
+          type: "integer"
+          example: 300
+          nullable: true
+        maxSuggestions:
+          format: "int32"
+          description: "Maximum number of alternative assignment suggestions to return\
+            \ when using the suggestion endpoint. The solver generates multiple assignment\
+            \ options for unassigned jobs, ranked by quality. A value of 0 (default)\
+            \ returns all possible suggestions, while values 1-5 limit the results\
+            \ to the best alternatives. Higher values increase response time but provide\
+            \ more options."
+          maximum: 5
+          minimum: 0
+          type: "integer"
+          nullable: true
+        onlyFeasibleSuggestions:
+          description: "Filter suggestions based on feasibility. When true (default),\
+            \ only suggestions that don't violate hard constraints are returned if\
+            \ the initial plan is feasible. If the initial plan is infeasible, only\
+            \ suggestions that don't worsen the infeasibility are returned. When false,\
+            \ all suggestions are returned regardless of feasibility, which may include\
+            \ constraint violations."
+          type: "boolean"
+          example: true
+          nullable: true
+        workloadSensitivity:
+          format: "double"
+          type: "number"
+          nullable: true
+        explanation:
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/ExplanationOptions"
+          nullable: true
+        fairComplexityPerTrip:
+          type: "boolean"
+          nullable: true
+        fairComplexityPerResource:
+          type: "boolean"
+          nullable: true
+      example:
+        euclidian: false
+        routingEngine: "OSM"
+        partialPlanning: true
+        minimizeResources: true
+        traffic: 1.1
+        polylines: true
+        fairWorkloadPerTrip: false
+        fairWorkloadPerResource: false
+        workloadSensitivity: 0.1
+        snapUnit: 300
+        maxSuggestions: 3
+        onlyFeasibleSuggestions: true
+        explanation:
+          enabled: true
+          filterHardConstraints: true
+    Weights:
+      description: "OnRoute Weights"
+      type: "object"
+      properties:
+        priorityWeight:
+          format: "int32"
+          description: "Weight modifier for job priority constraints. Higher values\
+            \ make the solver more likely to include high-priority jobs in the solution\
+            \ when not all jobs can be assigned. This affects job selection probability\
+            \ but not scheduling order. The weight is multiplied by the job's priority\
+            \ value and duration."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 100
+          nullable: true
+        workloadSpreadWeight:
+          format: "int32"
+          description: "Weight modifier for workload balancing across resources and\
+            \ time periods. Higher values make the solver more aggressive about equalizing\
+            \ service time distribution. Works with fairWorkloadPerTrip and fairWorkloadPerResource\
+            \ options, and is sensitive to the workloadSensitivity parameter."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 10
+          nullable: true
+        travelTimeWeight:
+          format: "int32"
+          description: "Weight modifier for total travel time optimization. This is\
+            \ the baseline weight (typically 1) against which all other weights are\
+            \ compared. Higher values make the solver more aggressive about minimizing\
+            \ travel time, potentially at the expense of other objectives."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 1
+          nullable: true
+        plannedWeight:
+          format: "int32"
+          description: "Weight modifier for deviations from planned arrivals and resource\
+            \ assignments. Higher values make the solver more reluctant to deviate\
+            \ from plannedArrival times and plannedResource assignments. This is crucial\
+            \ for maintaining customer appointments and commitments."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 1000
+          nullable: true
+        asapWeight:
+          format: "int32"
+          description: "Weight modifier for scheduling jobs as early as possible within\
+            \ their time windows and resource availability. Higher values push jobs\
+            \ toward the beginning of shifts and planning periods, useful for front-loading\
+            \ work or maximizing completion rates."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 5
+          nullable: true
+        minimizeResourcesWeight:
+          format: "int32"
+          description: "Weight modifier for minimizing the number of active resources\
+            \ per day/trip. The weight is measured in the same units as travel time\
+            \ - a weight of 3600 means using an additional resource is equivalent\
+            \ to 1 hour of travel time. Higher values encourage consolidation of jobs\
+            \ onto fewer resources."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 3600
+          nullable: true
+        allowedResourcesWeight:
+          format: "int32"
+          description: "Weight modifier for soft violations of resource assignment\
+            \ constraints. When jobs have allowedResources restrictions and they cannot\
+            \ be satisfied as hard constraints, this weight determines the penalty\
+            \ for assigning jobs to non-allowed resources."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 500
+          nullable: true
+        waitTimeWeight:
+          format: "int32"
+          description: "Weight modifier for total waiting time across all resources.\
+            \ Waiting time occurs when resources arrive at jobs before their time\
+            \ windows open or when they have idle time between jobs. Higher values\
+            \ make the solver more aggressive about minimizing idle time."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 1
+          nullable: true
+        urgencyWeight:
+          format: "int32"
+          description: "Weight modifier for job urgency constraints. Higher values\
+            \ make the solver more aggressive about scheduling urgent jobs earlier\
+            \ in the day and planning period. This affects the sequence and timing\
+            \ of job execution based on their urgency values."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 50
+          nullable: true
+        driveTimeWeight:
+          format: "int32"
+          description: "Weight modifier for total driving time across all resources.\
+            \ Similar to travelTimeWeight but focuses specifically on driving time\
+            \ violations or constraints. Higher values make the solver more concerned\
+            \ with minimizing driving time, useful for fuel efficiency or driver fatigue\
+            \ management."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 1
+          nullable: true
+        rankingWeight:
+          format: "int32"
+          description: "Weight modifier for resource ranking preferences defined in\
+            \ job rankings. Higher values make the solver more aggressive about assigning\
+            \ jobs to their preferred (lower-ranked) resources, even if it increases\
+            \ travel time or other costs. This helps maintain service quality by using\
+            \ optimal resource assignments."
+          maximum: 1000
+          minimum: 0
+          type: "integer"
+          example: 10
+          nullable: true
+      example:
+        priorityWeight: 100
+        workloadSpreadWeight: 10
+        travelTimeWeight: 1
+        plannedWeight: 1000
+        asapWeight: 5
+        minimizeResourcesWeight: 3600
+        allowedResourcesWeight: 500
+        waitTimeWeight: 1
+        urgencyWeight: 50
+        driveTimeWeight: 1
+    CustomDistanceMatrices:
+      description: "Custom distance matrix configuration for multi-profile and multi-slice\
+        \ scenarios"
+      type: "object"
+      properties:
+        profileMatrices:
+          description: "Map of vehicle profile names (CAR, BIKE, TRUCK) to time slice\
+            \ hour mappings. Each time slice hour maps to a matrix ID that should\
+            \ be fetched from the distance matrix service. Time slice hours correspond\
+            \ to: 6=MORNING_RUSH, 9=MORNING, 12=MIDDAY, 14=AFTERNOON, 16=EVENING_RUSH,\
+            \ 20=NIGHT."
+          type: "object"
+          additionalProperties:
+            type: "object"
+            additionalProperties:
+              type: "string"
+          nullable: true
+        matrixServiceUrl:
+          description: "Optional URL for external distance matrix service endpoint.\
+            \ If not provided, uses the default system service."
+          type: "string"
+          nullable: true
+      example:
+        profileMatrices:
+          CAR:
+            "6": "matrix-car-morning-123"
+            "9": "matrix-car-midday-456"
+            "16": "matrix-car-evening-789"
+          TRUCK:
+            "6": "matrix-truck-morning-abc"
+            "9": "matrix-truck-midday-def"
+        matrixServiceUrl: "https://custom-matrix-service.com/api"
+    Relation:
+      description: "Relation between two jobs."
+      required:
+      - "type"
+      - "jobs"
+      - "timeInterval"
+      type: "object"
+      properties:
+        type:
+          description: "Type of relationship constraint between jobs. SAME_TRIP: jobs\
+            \ must be on the same vehicle/day. SEQUENCE: jobs must be done in order\
+            \ with optional time intervals. DIRECT_SEQUENCE: jobs must be consecutive\
+            \ with no other jobs between them. NEIGHBOR: jobs must be geographically\
+            \ close. SAME_TIME: jobs must be done simultaneously. PICKUP_AND_DELIVERY:\
+            \ first job is pickup, second is delivery. SAME_RESOURCE: jobs must use\
+            \ the same resource. SAME_DAY: jobs must be on the same day. GROUP_SEQUENCE:\
+            \ jobs with matching tags must be in sequence."
+          pattern: "\\S"
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/RelationType"
+        jobs:
+          description: "List of job names involved in this relation. For sequence-based\
+            \ relations, the order matters - jobs will be executed in the order specified.\
+            \ For other relations, order may be irrelevant. All job names must exist\
+            \ in the request's jobs list."
+          type: "array"
+          items:
+            type: "string"
+          example:
+          - "JOB-1"
+          - "JOB-2"
+        resource:
+          description: "Optional resource constraint for this relation. When specified,\
+            \ all jobs in the relation must be assigned to this specific resource.\
+            \ This creates a hard constraint that can help enforce resource-specific\
+            \ workflows or capabilities."
+          type: "string"
+          example: "vehicle-1"
+          nullable: true
+        minTimeInterval:
+          format: "int32"
+          description: "Minimum time interval in seconds that must pass between consecutive\
+            \ jobs in sequence relations. This ensures adequate time for travel, setup,\
+            \ or processing between related jobs. Only applies to SEQUENCE, DIRECT_SEQUENCE,\
+            \ and SAME_TIME relations."
+          type: "integer"
+          example: 0
+          nullable: true
+        maxTimeInterval:
+          format: "int32"
+          description: "Maximum time interval in seconds allowed between consecutive\
+            \ jobs in sequence relations. This prevents excessive delays between related\
+            \ jobs and ensures timely completion of job sequences. Only applies to\
+            \ SEQUENCE, DIRECT_SEQUENCE, and SAME_TIME relations."
+          type: "integer"
+          example: 3600
+          nullable: true
+        partialPlanning:
+          description: "Allows the solver to include only some jobs from this relation\
+            \ in the final solution when the full relation cannot be satisfied due\
+            \ to constraints. When false, either all jobs in the relation are assigned\
+            \ or none are, maintaining the relation's integrity."
+          type: "boolean"
+          example: false
+        maxWaitingTime:
+          format: "int32"
+          description: "Maximum waiting time in seconds between jobs in a SAME_TIME\
+            \ relation. This defines how much time synchronization tolerance is allowed\
+            \ - jobs can start within this time window of each other. Defaults to\
+            \ 1200 seconds (20 minutes) if not specified."
+          type: "integer"
+          example: 1200
+          nullable: true
+        timeInterval:
+          description: "Reference point for measuring time intervals between jobs\
+            \ in sequence relations. FROM_ARRIVAL (default) measures from when the\
+            \ first job's service begins to when the second job's service begins.\
+            \ FROM_DEPARTURE measures from when the first job's service ends to when\
+            \ the second job's service begins."
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/TimeInterval"
+        tags:
+          description: "List of tag names used to define job groups in GROUP_SEQUENCE\
+            \ relations. Jobs with matching tags form groups that must be executed\
+            \ in sequence. This allows for complex sequencing rules based on job characteristics\
+            \ rather than explicit job names."
+          type: "array"
+          items:
+            type: "string"
+          example:
+          - "urgent"
+          - "morning"
+          nullable: true
+        enforceCompatibility:
+          description: "When true, enforces resource compatibility checking for SAME_TIME\
+            \ relations. Only compatible resources can work together on linked jobs."
+          type: "boolean"
+        hardMinWait:
+          description: "When true (default), the minimum time interval constraint\
+            \ is enforced as a hard constraint. When false, it becomes a soft constraint\
+            \ that can be violated with penalty. Useful for SEQUENCE and SAME_TIME\
+            \ relations where timing flexibility is acceptable."
+          type: "boolean"
+          example: true
+        weight:
+          format: "int32"
+          description: "Weight modifier for this relation. This can be used to modify\
+            \ the weight of a relation to make it more or less important than other\
+            \ relations."
+          type: "integer"
+          example: 1
+          nullable: true
+      example:
+        type: "SEQUENCE"
+        jobs:
+        - "Job-1"
+        - "Job-2"
+        resource: "vehicle-1"
+        minTimeInterval: 0
+        maxTimeInterval: 3600
+        partialPlanning: false
+        maxWaitingTime: 1200
+        timeInterval: "FROM_ARRIVAL"
+        tags:
+        - "urgent"
+    Message:
+      description: "Error or warning message"
+      required:
+      - "message"
+      type: "object"
+      properties:
+        code:
+          format: "int32"
+          description: "Error code"
+          type: "integer"
+          nullable: false
+        message:
+          description: "Error message"
+          type: "string"
+          nullable: false
+    RoutingConflict:
+      description: "Conflicts in the solution"
+      required:
+      - "constraint"
+      - "score"
+      type: "object"
+      properties:
+        constraint:
+          description: "Constraint type."
+          type: "string"
+          nullable: false
+        score:
+          description: "Score impact of this conflict."
+          type: "string"
+          nullable: false
+        job:
+          description: "Job id."
+          type: "string"
+          nullable: true
+        resource:
+          description: "Resource id."
+          type: "string"
+          nullable: true
+        tag:
+          description: "Tag id."
+          type: "string"
+          nullable: true
+        relation:
+          type: "string"
+          nullable: true
+      example:
+        constraint: "TIME_WINDOW_CONFLICT"
+        score: "-1000"
+        job: "Job-1"
+        resource: "vehicle-1"
+      nullable: true
+    Unresolved:
+      description: "Unresolved constraints in the solution"
+      required:
+      - "constraint"
+      - "score"
+      type: "object"
+      properties:
+        constraint:
+          description: "Constraint type."
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/OnrouteConstraint"
+          nullable: false
+        score:
+          description: "Score impact of this conflict."
+          type: "string"
+          nullable: false
+      example:
+        constraint: "TRAVEL_TIME"
+        score: "-1500"
+      nullable: true
+    OnrouteConstraint:
+      description: "Types of constraints that can be violated in a routing solution"
+      enum:
+      - "TRIP_CAPACITY"
+      - "RESOURCE_CAPACITY"
+      - "RESOURCE_CAPACITY2"
+      - "TRAVEL_TIME"
+      - "TYPE_REQUIREMENT"
+      - "TAG_SOFT"
+      - "TAG_HARD"
+      - "TYPE_REQUIREMENT_SOFT"
+      - "END_LOCATION_TRAVEL_TIME"
+      - "TIME_WINDOW_CONFLICT"
+      - "SHIFT_END_CONFLICT"
+      - "OVERTIME_END_CONFLICT"
+      - "RESOURCE_USAGE"
+      - "URGENCY"
+      - "PREFERRED_RESOURCE_CONFLICT"
+      - "ALLOWED_RESOURCES"
+      - "DISALLOWED_RESOURCES"
+      - "REGION_TIME"
+      - "FAIR_WORK"
+      - "UNSERVED_JOBS"
+      - "RESOURCE_ACTIVATION"
+      - "OPEN_DAYS"
+      - "JOB_PRECEDENCE"
+      - "JOB_DAY_INDEX"
+      - "DATE_TIME_WINDOW_CONFLICT"
+      - "DATE_TIME_WINDOW_CONFLICT_SOFT"
+      - "LINKED_JOB_CONFLICT"
+      - "PLANNED_RESOURCE"
+      - "PLANNED_ARRIVAL"
+      - "PLANNED_DATE"
+      - "WORKING_TIME"
+      - "HARD_JOBS"
+      - "MAX_DRIVE_TIME"
+      - "MAX_DRIVE_TIME_JOB"
+      - "FAIR_TOTAL_WORK"
+      - "RESOURCE_PERIOD_MAX_SERVICE_TIME"
+      - "RESOURCE_PERIOD_MAX_DRIVE_TIME"
+      - "RESOURCE_PERIOD_MAX_WORK_TIME"
+      - "RESOURCE_PERIOD_MIN_SERVICE_TIME"
+      - "RESOURCE_PERIOD_MIN_DRIVE_TIME"
+      - "RESOURCE_PERIOD_MIN_WORK_TIME"
+      - "MINIMISE_TRIP_USAGE"
+      - "DELIVERY_NOT_ON_SAME_VEHICLE"
+      - "DELIVERY_BEFORE_PICKUP"
+      - "SAME_TRIP"
+      - "SEQUENCE"
+      - "SAME_TIME"
+      - "NEIGHBOR"
+      - "DIRECT_SEQUENCE"
+      - "SAME_RESOURCE"
+      - "WAIT_TIME"
+      - "DRIVE_TIME"
+      - "HOURLY_COST"
+      - "RANKING_SOFT"
+      - "FAIR_COMPLEXITY_PER_TRIP"
+      - "FAIR_COMPLEXITY_PER_RESOURCE"
+      - "RESOURCE_PERIOD_MIN_COMPLEXITY"
+      - "RESOURCE_PERIOD_MAX_COMPLEXITY"
+      - "RESOURCE_COMPATIBILITY"
+      - "JOBTYPE_VIOLATION"
+      type: "string"
+      example: "TRAVEL_TIME"
+    SolviceStatus:
+      description: "Status of the solve job."
+      enum:
+      - "ERROR"
+      - "QUEUED"
+      - "SOLVING"
+      - "SOLVED"
+      type: "string"
+    Trip:
+      description: "Trip for a resource. Holds a list of visits for a resource and\
+        \ a date."
+      required:
+      - "visits"
+      type: "object"
+      properties:
+        visits:
+          description: "List of visits for a resource and a date."
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Visit"
+        resource:
+          description: "Resource"
+          type: "string"
+          example: "resource-1"
+          nullable: true
+        date:
+          format: "ISO8601 date string"
+          description: "Date"
+          type: "string"
+          example: "2021-01-01"
+          nullable: true
+        departureTime:
+          format: "ISO8601 datetime string"
+          description: "Departure date-time"
+          type: "string"
+          example: "2021-01-01T08:00:00"
+          nullable: true
+        waitTime:
+          format: "int64"
+          description: "Wait time in seconds"
+          type: "integer"
+          example: 0
+          nullable: true
+        travelTime:
+          format: "int64"
+          description: "Travel time in seconds"
+          type: "integer"
+          example: 123
+          nullable: true
+        workTime:
+          format: "int64"
+          description: "Work time in seconds"
+          type: "integer"
+          example: 123
+          nullable: true
+        serviceTime:
+          format: "int64"
+          description: "Service time in seconds"
+          type: "integer"
+          example: 123
+          nullable: true
+        polyline:
+          description: "Polyline of the trip"
+          type: "string"
+          example: "polyline"
+          nullable: true
+        occupancy:
+          format: "double"
+          description: "How full this trip is in terms of work time over capacity.\
+            \ Eg 80%"
+          type: "number"
+          example: 0.8
+          nullable: true
+        start:
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Visit"
+          nullable: true
+        end:
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Visit"
+          nullable: true
+        distance:
+          format: "int64"
+          type: "integer"
+          nullable: true
+      example:
+        resource: "vehicle-1"
+        date: "2023-01-13T00:00:00Z"
+        departureTime: "2023-01-13T08:00:00Z"
+        visits:
+        - job: "Job-1"
+          arrival: "2023-01-13T08:30:00Z"
+          serviceTime: 600
+          travelTime: 1800
+          distance: 15000
+          location:
+            latitude: 51.0543
+            longitude: 3.7174
+          waitTime: 0
+        - job: "Job-2"
+          arrival: "2023-01-13T09:45:00Z"
+          serviceTime: 900
+          travelTime: 900
+          distance: 8000
+          location:
+            latitude: 51.05
+            longitude: 3.72
+          waitTime: 0
+        waitTime: 0
+        travelTime: 2700
+        distance: 23000
+        workTime: 4200
+        serviceTime: 1500
+        polyline: "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+        occupancy: 0.47
+    SuggestionDto:
+      required:
+      - "score"
+      - "assignments"
+      type: "object"
+      properties:
+        score:
+          $ref: "#/components/schemas/Score"
+        assignments:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/JobAssignment"
+    ViolatedConstraint:
+      description: "A constraint that is broken in the current solution with a certain\
+        \ value (penalty) and a certain level (hard, soft, medium)."
+      required:
+      - "name"
+      - "value"
+      - "level"
+      type: "object"
+      properties:
+        name:
+          description: "Name of the constraint."
+          type: "string"
+          example: "maxDistance"
+          nullable: true
+        value:
+          format: "int32"
+          description: "Value of the unresolved constraint. The higher, the more deviation\
+            \ from perfection this constraint has."
+          type: "integer"
+          example: 100
+          nullable: true
+        level:
+          description: "Level of unresolved constraint."
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/Level"
+          example: "[HARD, MEDIUM, SOFT]"
+          nullable: true
+    Shift:
+      description: "Shift definition. Every potential shift of a resource should be\
+        \ defined here. Every shift can be a trip."
+      required:
+      - "from"
+      - "to"
+      type: "object"
+      properties:
+        from:
+          format: "ISO8601 datetime string"
+          description: "Start of the shift datetime "
+          type: "string"
+          example: "2023-01-13T08:00:00"
+        to:
+          format: "ISO8601 datetime string"
+          description: "End of the shift datetime"
+          type: "string"
+          example: "2023-01-13T16:00:00"
+        start:
+          description: "Start location"
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+        end:
+          description: "End location"
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+        ignoreTravelTimeToFirstJob:
+          description: "Ignore the travel time from the start location to the first\
+            \ order"
+          type: "boolean"
+          nullable: true
+        ignoreTravelTimeFromLastJob:
+          description: "Ignore the travel time from the last order to the optional\
+            \ end location"
+          type: "boolean"
+          nullable: true
+        overtime:
+          description: "Can go into overtime."
+          deprecated: true
+        overtimeEnd:
+          format: "ISO8601 datetime string"
+          description: "Maximum overtime time."
+          type: "string"
+          example: "2022-03-10T12:15:50-04:00"
+          nullable: true
+        breaks:
+          description: "Windowed breaks definitions."
+          type: "array"
+          items:
+            $ref: "#/components/schemas/BreakDto1"
+          nullable: true
+        tags:
+          description: "Shift tags will ensure that this resource can only do Jobs\
+            \ of this tag during this shift. This allows for tag based availability."
+          type: "array"
+          items:
+            type: "string"
+          nullable: true
+        jobTypeLimitations:
+          description: "Map of job type to maximum count allowed per shift. Null means\
+            \ no limitations."
+          type: "object"
+          additionalProperties:
+            format: "int32"
+            type: "integer"
+          example:
+            Initial Appointment: 2
+            Wound Care: 1
+          nullable: true
+      example:
+        from: "2023-01-13T08:00:00Z"
+        to: "2023-01-13T17:00:00Z"
+        start:
+          latitude: 51.0543
+          longitude: 3.7174
+        end:
+          latitude: 51.05
+          longitude: 3.72
+        ignoreTravelTimeToFirstJob: false
+        ignoreTravelTimeFromLastJob: false
+        overtimeEnd: "2023-01-13T19:00:00Z"
+        breaks:
+        - type: "WINDOWED"
+          duration: 1800
+          from: "2023-01-13T12:00:00Z"
+          to: "2023-01-13T13:00:00Z"
+        tags:
+        - "delivery"
+        - "installation"
+    Location:
+      description: "Geographical Location in WGS-84"
+      type: "object"
+      properties:
+        latitude:
+          format: "double"
+          description: "Latitude"
+          type: "number"
+          example: 50.0987624
+        longitude:
+          format: "double"
+          description: "Longitude"
+          type: "number"
+          example: 4.93849204
+    Category:
+      description: "Transportation type for the resource"
+      enum:
+      - "CAR"
+      - "BIKE"
+      - "TRUCK"
+      type: "string"
+      example: "CAR"
+    Rule:
+      description: "Periodic time rule for a resource"
+      type: "object"
+      properties:
+        period:
+          description: "Period of the rule. If null, then it encompasses the entire\
+            \ period."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/PeriodDto"
+          nullable: false
+        minWorkTime:
+          format: "int32"
+          description: "Minimum work time in seconds. Work time is service time +\
+            \ drive/travel time."
+          type: "integer"
+          nullable: true
+        maxWorkTime:
+          format: "int32"
+          description: "Maximum work time in seconds. Work time is service time +\
+            \ drive/travel time."
+          type: "integer"
+          nullable: true
+        minServiceTime:
+          format: "int32"
+          description: "Minimum service time in seconds"
+          type: "integer"
+          nullable: true
+        maxServiceTime:
+          format: "int32"
+          description: "Maximum service time in seconds"
+          type: "integer"
+          nullable: true
+        minDriveTime:
+          format: "int32"
+          description: "Minimum drive time in seconds"
+          type: "integer"
+          nullable: true
+        maxDriveTime:
+          format: "int32"
+          description: "Maximum drive time in seconds"
+          type: "integer"
+          nullable: true
+        minJobComplexity:
+          format: "int32"
+          description: "Sum of the complexity of the jobs completed by this resource\
+            \ should reach this value"
+          type: "integer"
+          nullable: true
+        maxJobComplexity:
+          format: "int32"
+          description: "Sum of the complexity of the jobs completed by this resource\
+            \ should not go over this value"
+          type: "integer"
+          nullable: true
+        jobTypeLimitations:
+          description: "Map of job type to maximum count allowed per period. Null\
+            \ means no limitations."
+          type: "object"
+          additionalProperties:
+            format: "int32"
+            type: "integer"
+          example:
+            Initial Appointment: 10
+            Wound Care: 5
+          nullable: true
+      example:
+        period:
+          from: "2024-01-01T08:00:00Z"
+          to: "2024-01-07T17:00:00Z"
+        minWorkTime: 14400
+        maxWorkTime: 28800
+        minServiceTime: 7200
+        maxServiceTime: 21600
+        minDriveTime: 3600
+        maxDriveTime: 10800
+    Tag:
+      description: "A tag is a match between a `Job` and a `Resource`."
+      required:
+      - "name"
+      type: "object"
+      properties:
+        name:
+          description: "Tag name that defines a skill, capability, or requirement.\
+            \ This creates a matching constraint between jobs and resources - only\
+            \ resources with this tag can be assigned to jobs that require it. Common\
+            \ examples include 'plumbing', 'electrical', 'certified-technician', or\
+            \ 'heavy-lifting'."
+          type: "string"
+          example: "certified-technician"
+        hard:
+          description: "Constraint type for this tag requirement. When true (default),\
+            \ creates a hard constraint - jobs can only be assigned to resources with\
+            \ matching tags. When false, creates a soft constraint - jobs prefer resources\
+            \ with matching tags but can be assigned to others if needed, with a score\
+            \ penalty."
+          default: true
+          type: "boolean"
+          example: false
+          nullable: true
+        weight:
+          format: "int32"
+          description: "Penalty weight applied when this tag constraint is violated\
+            \ (soft constraints only). The weight is measured in the same units as\
+            \ travel time - a weight of 3600 means violating this tag constraint is\
+            \ equivalent to 1 hour of additional travel time. Higher weights make\
+            \ the constraint more important."
+          type: "integer"
+          example: 300
+          nullable: true
+      example:
+        name: "certified-technician"
+        hard: false
+        weight: 300
+    Ranking:
+      description: "A ranking is a measure of the affinity of a `Resource` towards\
+        \ a `Job`."
+      required:
+      - "name"
+      type: "object"
+      properties:
+        name:
+          description: "Name of the resource being ranked for this job. Must exactly\
+            \ match a resource name defined in the request's resources list. This\
+            \ creates a preference relationship between the job and the specified\
+            \ resource."
+          type: "string"
+          example: "vehicle-1"
+        ranking:
+          format: "int32"
+          description: "Preference ranking score for this resource (1-100). Lower\
+            \ values indicate stronger preference - rank 1 is most preferred, rank\
+            \ 100 is least preferred. The solver will try to assign jobs to higher-ranked\
+            \ (lower-numbered) resources when possible, with the preference strength\
+            \ controlled by the rankingWeight in the weights configuration."
+          maximum: 100
+          minimum: 1
+          type: "integer"
+          example: 5
+          nullable: true
+      example:
+        name: "certified-technician"
+        ranking: 5
+    DateWindow:
+      description: "Window in which the job can be executed"
+      required:
+      - "from"
+      - "to"
+      type: "object"
+      properties:
+        from:
+          format: "ISO8601 datetime string"
+          description: "Date time start of window"
+          type: "string"
+          example: "2023-01-13T08:00"
+        to:
+          format: "ISO8601 datetime string"
+          description: "Date time end of window"
+          type: "string"
+          example: "2023-01-18T12:00"
+        weight:
+          format: "int32"
+          description: "Weight constraint modifier"
+          default: 1
+          type: "integer"
+          example: 1
+          nullable: true
+        hard:
+          description: "Hard constraint violation of DateWindow"
+          default: true
+          type: "boolean"
+          example: true
+          nullable: true
+      example:
+        from: "2024-01-15T09:00:00Z"
+        to: "2024-01-15T17:00:00Z"
+        hard: true
+        weight: 1
+    RoutingEngine:
+      description: "The routing engine to use for distance and travel time calculations"
+      enum:
+      - "OSM"
+      - "TOMTOM"
+      - "GOOGLE"
+      - "ANYMAP"
+      type: "string"
+      example: "OSM"
+    ExplanationOptions:
+      description: "Options to manage the explanation of the solution"
+      type: "object"
+      properties:
+        enabled:
+          description: "When enabled the explanation will contain a map of all the\
+            \ alternative positions for each job"
+          type: "boolean"
+          example: true
+          nullable: true
+        filterHardConstraints:
+          description: "When true the map of alternative positions will contain only\
+            \ feasible alternatives"
+          type: "boolean"
+          example: true
+          nullable: true
+        onlyUnassigned:
+          type: "boolean"
+          nullable: true
+      example:
+        enabled: true
+        filterHardConstraints: true
+    RelationType:
+      description: "Type of relation between jobs"
+      enum:
+      - "SAME_TRIP"
+      - "SEQUENCE"
+      - "DIRECT_SEQUENCE"
+      - "SAME_TIME"
+      - "NEIGHBOR"
+      - "PICKUP_AND_DELIVERY"
+      - "SAME_RESOURCE"
+      - "SAME_DAY"
+      - "GROUP_SEQUENCE"
+      type: "string"
+      example: "SEQUENCE"
+    TimeInterval:
+      description: "Determines if the time interval between jobs should be measured\
+        \ from arrival or departure"
+      enum:
+      - "FROM_ARRIVAL"
+      - "FROM_DEPARTURE"
+      type: "string"
+      example: "FROM_ARRIVAL"
+    Visit:
+      description: "Single visit for a resource. Holds information of the actual arrival\
+        \ time, the job, the location and the latlng."
+      type: "object"
+      properties:
+        arrival:
+          description: "Actual arrival date-time"
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/ZonedDateTime"
+          nullable: true
+        serviceTime:
+          format: "int64"
+          description: "Total service time of that job in seconds"
+          type: "integer"
+          nullable: true
+        travelTime:
+          format: "int64"
+          description: "Total travel time to that job in seconds"
+          type: "integer"
+          nullable: true
+        distance:
+          format: "int64"
+          description: "Total travel distance to that job in meters"
+          type: "integer"
+          nullable: true
+        job:
+          description: "Job"
+          type: "string"
+          nullable: true
+        activity:
+          description: "The activity to "
+          type: "string"
+          nullable: true
+        location:
+          description: "Location with lat/lon"
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+        latlon:
+          description: "Snapped Latlng. When we get your lat/lon in input, we snap\
+            \ it on our map to a valid point in the graph. We return all snapped points."
+          type: "array"
+          items:
+            format: "double"
+            type: "number"
+          nullable: true
+        snappedLocation:
+          description: "Snapped location. When we get your lat/lon in input, we snap\
+            \ it on our map to a valid point in the graph. We return all snapped points."
+          type: "object"
+          allOf:
+          - $ref: "#/components/schemas/Location"
+          nullable: true
+        breakTime:
+          format: "int32"
+          description: "Break time in seconds"
+          type: "integer"
+          nullable: true
+        waitTime:
+          format: "int64"
+          description: "Wait time in seconds"
+          type: "integer"
+          nullable: true
+      example:
+        job: "Job-1"
+        arrival: "2023-01-13T08:30:00Z"
+        serviceTime: 600
+        travelTime: 1800
+        distance: 15000
+        activity: "service"
+        location:
+          latitude: 51.0543
+          longitude: 3.7174
+        latlng:
+        - 51.0543
+        - 3.7174
+        breakTime: 0
+        waitTime: 0
+    Score:
+      description: "The score of a solution shows how good this solution is w.r.t\
+        \ all the constraints. All solvers try to maximize the score."
+      type: "object"
+      properties:
+        hardScore:
+          format: "int64"
+          description: "The score of the constraints that are hard. This should be\
+            \ 0 in order to be feasible."
+          type: "integer"
+          nullable: true
+        mediumScore:
+          format: "int64"
+          description: "The score of the constraints that are medium."
+          type: "integer"
+          nullable: true
+        softScore:
+          format: "int64"
+          description: "The score of the constraints that are soft."
+          type: "integer"
+          nullable: true
+        feasible:
+          type: "boolean"
+          nullable: true
+      nullable: false
+    JobAssignment:
+      description: "Assignment for a job to a resource. Holds information of the actual\
+        \ arrival time, the job, the resource and the suggested arrival time."
+      required:
+      - "job"
+      - "resource"
+      - "executedAfter"
+      type: "object"
+      properties:
+        job:
+          description: "Job"
+          type: "string"
+        resource:
+          description: "Resource"
+          type: "string"
+        suggestedArrival:
+          format: "ISO8601 datetime string"
+          description: "Suggested arrival date-time"
+          type: "string"
+          example: "2022-03-10T12:15:50-04:00"
+          nullable: true
+        latestArrival:
+          format: "ISO8601 datetime string"
+          description: "Latest arrival date-time"
+          type: "string"
+          example: "2022-03-10T12:15:50-04:00"
+          nullable: true
+        executedAfter:
+          description: "Executed after date-time"
+          type: "string"
+        score:
+          description: "Score of the assignment"
+          type: "object"
+          properties:
+            hardScore:
+              format: "int64"
+              description: "The score of the constraints that are hard. This should\
+                \ be 0 in order to be feasible."
+              type: "integer"
+              nullable: true
+            mediumScore:
+              format: "int64"
+              description: "The score of the constraints that are medium."
+              type: "integer"
+              nullable: true
+            softScore:
+              format: "int64"
+              description: "The score of the constraints that are soft."
+              type: "integer"
+              nullable: true
+            feasible:
+              type: "boolean"
+              nullable: true
+          nullable: true
+        scoreExplanation:
+          description: "Unresolved constraints in this alternative solution"
+          required:
+          - "constraint"
+          - "score"
+          type: "object"
+          properties:
+            constraint:
+              description: "Constraint type."
+              type: "string"
+              allOf:
+              - $ref: "#/components/schemas/OnrouteConstraint"
+              nullable: false
+            score:
+              description: "Score impact of this conflict."
+              type: "string"
+              nullable: false
+          example:
+            constraint: "TRAVEL_TIME"
+            score: "-1500"
+          nullable: true
+        suggestedInitialArrival:
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/ZonedDateTime"
+          nullable: true
+        violations:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Unresolved"
+          nullable: true
+      example:
+        job: "Job-1"
+        resource: "vehicle-1"
+        suggestedArrival: "2023-01-13T09:30:00Z"
+        latestArrival: "2023-01-13T10:00:00Z"
+        executedAfter: "Job-0"
+        suggestedInitialArrival: "2023-01-13T09:00:00Z"
+        score:
+          hard: 0
+          soft: -1500
+          feasible: true
+        violations:
+        - constraint: "TRAVEL_TIME"
+          score: "-1500"
+    Level:
+      enum:
+      - "HARD"
+      - "SOFT"
+      - "MEDIUM"
+      type: "string"
+    BreakDto1:
+      required:
+      - "type"
+      type: "object"
+      properties:
+        type:
+          $ref: "#/components/schemas/BreakType"
+    PeriodDto:
+      description: "Subset of the planning period"
+      required:
+      - "start"
+      - "end"
+      - "from"
+      - "to"
+      type: "object"
+      properties:
+        from:
+          description: "Start date-time "
+          type: "string"
+          allOf:
+          - $ref: "#/components/schemas/ZonedDateTime"
+          example: "2007-12-01T08:00:00"
+        end:
+          description: "End date-time "
+          example: "2007-12-31T17:00:00"
+        to:
+          $ref: "#/components/schemas/ZonedDateTime"
+      example:
+        from: "2024-01-01T08:00:00Z"
+        to: "2024-01-07T17:00:00Z"
+    ZonedDateTime:
+      format: "date-time"
+      type: "string"
+      example: "2022-03-10T12:15:50-04:00"
+    BreakType:
+      description: "Type of break that can be defined for a resource"
+      enum:
+      - "WINDOWED"
+      - "DRIVE"
+      - "UNAVAILABILITY"
+      type: "string"
+      example: "WINDOWED"
+  securitySchemes:
+    apikey:
+      type: "apiKey"
+      description: "Api Key based authentication (apikey)"
+      name: "Authorization"
+      in: "header"
