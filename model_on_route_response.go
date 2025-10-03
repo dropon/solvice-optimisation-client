@@ -1,7 +1,7 @@
 /*
 VRP API
 
-             Welcome to the Solvice API! You can use our API to access Solvice API endpoints,             which can get information on your solved jobs,             their statuses and of course post new solve jobs.         
+             Welcome to the Solvice API! You can use our API to access Solvice API endpoints,             which can get information on your solved jobs,             their statuses and of course post new solve jobs.
 
 API version: 2.0
 */
@@ -11,9 +11,8 @@ API version: 2.0
 package openapi
 
 import (
-	"encoding/json"
 	"bytes"
-	"fmt"
+	"encoding/json"
 )
 
 // checks if the OnRouteResponse type satisfies the MappedNullable interface at compile time
@@ -24,8 +23,8 @@ type OnRouteResponse struct {
 	// Id of the solve job
 	Id NullableString `json:"id,omitempty"`
 	// Status of the Response
-	Status NullableSolviceStatus `json:"status,omitempty"`
-	Score NullableOnRouteResponseScore `json:"score,omitempty"`
+	Status NullableSolviceStatus        `json:"status,omitempty"`
+	Score  NullableOnRouteResponseScore `json:"score,omitempty"`
 	// Constraints that are violated
 	Unresolved interface{} `json:"unresolved,omitempty"`
 	// Actual solution: trips per shift/day and per resource
@@ -47,9 +46,9 @@ type OnRouteResponse struct {
 	// List of suggested assignments returned by suggest api call
 	Suggestions []SuggestionDto `json:"suggestions,omitempty"`
 	// Events and warnings generated during the solver execution
-	Messages []string `json:"messages,omitempty"`
-	Violations []ViolatedConstraint `json:"violations,omitempty"`
-	WorkloadFairness NullableFloat64 `json:"workloadFairness,omitempty"`
+	Messages         []string             `json:"messages,omitempty"`
+	Violations       []ViolatedConstraint `json:"violations,omitempty"`
+	WorkloadFairness NullableFloat64      `json:"workloadFairness,omitempty"`
 }
 
 type _OnRouteResponse OnRouteResponse
@@ -104,6 +103,7 @@ func (o *OnRouteResponse) HasId() bool {
 func (o *OnRouteResponse) SetId(v string) {
 	o.Id.Set(&v)
 }
+
 // SetIdNil sets the value for Id to be an explicit nil
 func (o *OnRouteResponse) SetIdNil() {
 	o.Id.Set(nil)
@@ -146,6 +146,7 @@ func (o *OnRouteResponse) HasStatus() bool {
 func (o *OnRouteResponse) SetStatus(v SolviceStatus) {
 	o.Status.Set(&v)
 }
+
 // SetStatusNil sets the value for Status to be an explicit nil
 func (o *OnRouteResponse) SetStatusNil() {
 	o.Status.Set(nil)
@@ -188,6 +189,7 @@ func (o *OnRouteResponse) HasScore() bool {
 func (o *OnRouteResponse) SetScore(v OnRouteResponseScore) {
 	o.Score.Set(&v)
 }
+
 // SetScoreNil sets the value for Score to be an explicit nil
 func (o *OnRouteResponse) SetScoreNil() {
 	o.Score.Set(nil)
@@ -287,6 +289,7 @@ func (o *OnRouteResponse) HasTotalWaitTimeInSeconds() bool {
 func (o *OnRouteResponse) SetTotalWaitTimeInSeconds(v int64) {
 	o.TotalWaitTimeInSeconds.Set(&v)
 }
+
 // SetTotalWaitTimeInSecondsNil sets the value for TotalWaitTimeInSeconds to be an explicit nil
 func (o *OnRouteResponse) SetTotalWaitTimeInSecondsNil() {
 	o.TotalWaitTimeInSeconds.Set(nil)
@@ -329,6 +332,7 @@ func (o *OnRouteResponse) HasOccupancy() bool {
 func (o *OnRouteResponse) SetOccupancy(v float64) {
 	o.Occupancy.Set(&v)
 }
+
 // SetOccupancyNil sets the value for Occupancy to be an explicit nil
 func (o *OnRouteResponse) SetOccupancyNil() {
 	o.Occupancy.Set(nil)
@@ -371,6 +375,7 @@ func (o *OnRouteResponse) HasTotalTravelDistanceInMeters() bool {
 func (o *OnRouteResponse) SetTotalTravelDistanceInMeters(v int64) {
 	o.TotalTravelDistanceInMeters.Set(&v)
 }
+
 // SetTotalTravelDistanceInMetersNil sets the value for TotalTravelDistanceInMeters to be an explicit nil
 func (o *OnRouteResponse) SetTotalTravelDistanceInMetersNil() {
 	o.TotalTravelDistanceInMeters.Set(nil)
@@ -413,6 +418,7 @@ func (o *OnRouteResponse) HasTotalTravelTimeInSeconds() bool {
 func (o *OnRouteResponse) SetTotalTravelTimeInSeconds(v int64) {
 	o.TotalTravelTimeInSeconds.Set(&v)
 }
+
 // SetTotalTravelTimeInSecondsNil sets the value for TotalTravelTimeInSeconds to be an explicit nil
 func (o *OnRouteResponse) SetTotalTravelTimeInSecondsNil() {
 	o.TotalTravelTimeInSeconds.Set(nil)
@@ -455,6 +461,7 @@ func (o *OnRouteResponse) HasTotalServiceTimeInSeconds() bool {
 func (o *OnRouteResponse) SetTotalServiceTimeInSeconds(v int64) {
 	o.TotalServiceTimeInSeconds.Set(&v)
 }
+
 // SetTotalServiceTimeInSecondsNil sets the value for TotalServiceTimeInSeconds to be an explicit nil
 func (o *OnRouteResponse) SetTotalServiceTimeInSecondsNil() {
 	o.TotalServiceTimeInSeconds.Set(nil)
@@ -662,6 +669,7 @@ func (o *OnRouteResponse) HasWorkloadFairness() bool {
 func (o *OnRouteResponse) SetWorkloadFairness(v float64) {
 	o.WorkloadFairness.Set(&v)
 }
+
 // SetWorkloadFairnessNil sets the value for WorkloadFairness to be an explicit nil
 func (o *OnRouteResponse) SetWorkloadFairnessNil() {
 	o.WorkloadFairness.Set(nil)
@@ -673,7 +681,7 @@ func (o *OnRouteResponse) UnsetWorkloadFairness() {
 }
 
 func (o OnRouteResponse) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -732,33 +740,11 @@ func (o OnRouteResponse) ToMap() (map[string]interface{}, error) {
 }
 
 func (o *OnRouteResponse) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"trips",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
 	varOnRouteResponse := _OnRouteResponse{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
 	err = decoder.Decode(&varOnRouteResponse)
-
 	if err != nil {
 		return err
 	}
@@ -803,5 +789,3 @@ func (v *NullableOnRouteResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
